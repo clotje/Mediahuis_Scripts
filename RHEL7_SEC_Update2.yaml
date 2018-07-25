@@ -1,7 +1,7 @@
 ---
 - hosts: all
   tasks:
-    - name: update all packages to lastest version
+    - name: Install the security packages
       yum:
         name: '*'
         security: yes
