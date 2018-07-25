@@ -3,7 +3,7 @@
   tasks:
     - name: list security updates
       yum:
-        list: security
+        list: updateinfo security
         register: result
         
     - debug:
