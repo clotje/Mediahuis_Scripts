@@ -10,8 +10,8 @@
       var: result
   
   - name: Install latest YUM Security packages
-     yum:
-         name: '*'
-         security: yes
-         state: latest 
+    yum:
+        name: '*'
+        security: yes
+        state: latest 
 
