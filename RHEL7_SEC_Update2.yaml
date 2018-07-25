@@ -1,8 +1,18 @@
 ---
 - hosts: all
   tasks:
-  - name: Install latest YUM Security packages
+  - name: list latest YUM Security packages
     yum:
         list: security
+        register: result
+        
+  - debug:
+      var: result
+  
+   - name: Install latest YUM Security packages
+    yum:
+        name: '*'
+        security: yes
+        state: latest 
  
 
