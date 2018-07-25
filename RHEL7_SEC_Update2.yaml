@@ -1,8 +1,8 @@
 ---
 - hosts: all
   tasks:
-- name: Install latest YUM Security packages
-    yum:
-        name: '*'
-        security: yes 
+- name: upgrade all packages
+  yum:
+    name: '*'
+    state: latest
 
