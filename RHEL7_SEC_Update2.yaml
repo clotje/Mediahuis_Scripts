@@ -4,5 +4,6 @@
     - name: update all packages to lastest version
       yum:
         name: '*'
+        security: yes
         state: latest
 
