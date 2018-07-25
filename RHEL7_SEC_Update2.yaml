@@ -3,6 +3,6 @@
   tasks:
   - name: Install latest YUM Security packages
     yum:
-        name: security
-    register: result    
+        list: security
+ 
 
