@@ -9,3 +9,4 @@
         
     - name: reboot server
       command: /usr/bin/systemctl reboot
+      
