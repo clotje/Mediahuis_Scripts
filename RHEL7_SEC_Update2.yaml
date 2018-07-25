@@ -1,6 +1,14 @@
 ---
 - hosts: all
-  tasks:       
+  tasks:
+    - name: list security updates
+      yum:
+        list: security
+        register: result
+        
+    - debug:
+        var: result
+        
     - name: Install the security packages.
       yum:
         name: '*'
