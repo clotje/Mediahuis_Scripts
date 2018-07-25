@@ -14,5 +14,9 @@
         name: '*'
         security: yes
         state: latest
+      register: yum_list2
+      
+    - debug:
+        var: yum_list2
 
 
