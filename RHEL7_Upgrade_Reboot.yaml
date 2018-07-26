@@ -1,22 +1,22 @@
 ---
-- hosts: all
+- hosts: '{{ hosts_lijst }}'
   tasks:          
-    - name: upgrade all packages
+    - name: Upgrade naar de laatste versie (all packages).
       yum:
         name: '*'
         update_cache: yes
         state: latest
-      register: reboot_required
+      register: reboot_nodig
       
-    - name: restart server
+    - name: Restart van de server {{ ansible_ssh_host | default(inventory_hostname) }} indien nodig.
       command: /usr/bin/systemd-run --on-active=5 --timer-property=AccuracySec=100ms /usr/bin/systemctl reboot
       async: 0
       poll: 0
       ignore_errors: true
       become: yes
-      when: reboot_required.rc == 1
+      when: reboot_nodig.rc == 1
 
-    - name: wait for server {{ ansible_ssh_host | default(inventory_hostname) }} to come back online
+    - name: Wacht op server {{ ansible_ssh_host | default(inventory_hostname) }} dat deze terug online is (ssh).
       wait_for:
         port: 22
         state: started
