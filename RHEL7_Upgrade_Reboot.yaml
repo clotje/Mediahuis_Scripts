@@ -6,7 +6,7 @@
         name: '*'
         update_cache: yes
         state: latest
-        register: reboot_required
+      register: reboot_required
       
     - name: restart server
       command: /usr/bin/systemd-run --on-active=5 --timer-property=AccuracySec=100ms /usr/bin/systemctl reboot
