@@ -1,5 +1,5 @@
 ---
-- hosts: '{{ hosts_lijst }}'
+- hosts: all
   tasks:          
     - name: Upgrade naar de laatste versie (all packages).
       yum:
