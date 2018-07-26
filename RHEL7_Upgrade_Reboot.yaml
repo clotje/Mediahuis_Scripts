@@ -6,6 +6,7 @@
         name: '*'
         update_cache: yes
         state: latest
+        register: reboot_required
       
     - name: restart server
       command: /usr/bin/systemd-run --on-active=5 --timer-property=AccuracySec=100ms /usr/bin/systemctl reboot
@@ -13,6 +14,7 @@
       poll: 0
       ignore_errors: true
       become: yes
+      when reboot_required.rc == 1
 
     - name: wait for server {{ ansible_ssh_host | default(inventory_hostname) }} to come back online
       wait_for:
