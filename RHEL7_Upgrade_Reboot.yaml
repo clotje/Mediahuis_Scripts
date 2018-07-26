@@ -14,7 +14,7 @@
       poll: 0
       ignore_errors: true
       become: yes
-      when: reboot_required.rc != 1
+      when: reboot_required.rc == 1
 
     - name: wait for server {{ ansible_ssh_host | default(inventory_hostname) }} to come back online
       wait_for:
