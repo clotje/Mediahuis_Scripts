@@ -6,6 +6,7 @@
         name: '*'
         update_cache: yes
         state: latest
+      when: ansible_distribution == 'Red Hat Enterprise Linux' and ansible_distribution_version == '7'
       register: reboot_nodig
       
     - name: Restart van de server {{ ansible_ssh_host | default(inventory_hostname) }} indien nodig.
@@ -14,7 +15,7 @@
       poll: 0
       ignore_errors: true
       become: yes
-      when: reboot_nodig.rc == 1
+      when: reboot_nodig.changed == true
 
     - name: Wacht op server {{ ansible_ssh_host | default(inventory_hostname) }} dat deze terug online is (ssh).
       wait_for:
@@ -22,4 +23,5 @@
         state: started
         host: '{{ ansible_ssh_host | default(inventory_hostname) }}'
         delay: 30
+      when: reboot_nodig.changed == true
       delegate_to: localhost
