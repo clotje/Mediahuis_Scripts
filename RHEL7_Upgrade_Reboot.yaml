@@ -9,7 +9,7 @@
         name: '*'
         update_cache: yes
         state: latest
-      when: ansible_distribution == 'RedHat' and ansible_distribution_version == '7'
+      when: ansible_distribution == 'RedHat' and ansible_distribution_version > '6'
       register: reboot_nodig
       
     - name: Restart van de server {{ ansible_ssh_host | default(inventory_hostname) }} indien nodig.
