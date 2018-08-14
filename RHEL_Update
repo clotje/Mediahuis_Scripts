@@ -1,0 +1,11 @@
+---
+- hosts: all
+  tasks:
+    - name: Install the security packages.
+      yum:
+        name: '*'
+        state: latest
+      register: yum_list2
+
+    - debug:
+        var: yum_list2
