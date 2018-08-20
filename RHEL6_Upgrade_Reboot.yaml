@@ -27,4 +27,4 @@
         host: '{{ ansible_ssh_host | default(inventory_hostname) }}'
         delay: 30
       when: reboot_nodig.changed == true
-delegate_to: localhost
+      delegate_to: localhost
