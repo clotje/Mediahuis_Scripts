@@ -9,7 +9,7 @@
         name: '*'
         update_cache: yes
         state: latest
-      when: ansible_distribution == 'RedHat' and ansible_distribution_version > '6'
+      when: ansible_distribution == 'RedHat'
       register: reboot_nodig
       
     - name: Restart van de server {{ ansible_ssh_host | default(inventory_hostname) }} indien nodig.
@@ -19,6 +19,14 @@
       ignore_errors: true
       become: yes
       when: ansible_distribution == 'RedHat' and ansible_distribution_version > '6'
+
+    - name: Restart van de server {{ ansible_ssh_host | default(inventory_hostname) }} indien nodig.
+      shell: sleep 10 & /sbin/shutdown -r now
+      async: 0
+      poll: 0
+      ignore_errors: true
+      become: yes
+      when: ansible_distribution == 'RedHat' and ansible_distribution_version < '7'
       
       
     - name: Wacht op server {{ ansible_ssh_host | default(inventory_hostname) }} dat deze terug online is (ssh).
