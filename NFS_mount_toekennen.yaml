@@ -18,10 +18,10 @@
   
   tasks:
     - set_fact:
-        mount_opts: "{{ mount_opts_nfs if (mounttype = 'nfs') else mount_opts_cifs }}"
+        mount_opts: "{{ mount_opts_nfs if (mounttype == 'nfs') else mount_opts_cifs }}"
         
     - set_fact:
-        mount_cred: "{{ mount_user_ntibco if (mountuser = 'ntibco') else mount_user_mft }}"
+        mount_cred: "{{ mount_user_ntibco if (mountuser == 'ntibco') else mount_user_mft }}"
         
     - name: kopie de aanmeld gegevens
       copy:
