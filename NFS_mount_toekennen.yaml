@@ -22,4 +22,4 @@
         path: "{{ nfsclientpath }}"
         opts: "{{ nfsoptions | default(nfs_mount_opts) }}"
         src: "{{ nfsserverpath }}"
-        state: mounted
+        state: present
