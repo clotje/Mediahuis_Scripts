@@ -15,7 +15,6 @@
     nfs_mount_type: nfs
 
 - name: Mount NFS share
-  become: yes
   mount:
     backup: yes
     fstype: "{{ nfstype | default(nfs_mount_type) }}"
