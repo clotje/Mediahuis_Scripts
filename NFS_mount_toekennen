@@ -7,11 +7,12 @@
 # nfsoptions:  NFS opties. Indien geen NFS opties, dan wordt automatisch "rw,soft,vers=3,proto=tcp" toegekend.
 # nfsclientpath: path op de client -> /mnt
 # Script zal autoamtisch de mountpoint makenindien deze folder niet bestaat -> state: mounted
-
 #
 
-nfs_mount_opts: rw,soft,vers=3,proto=tcp
-nfs_mount_type: nfs3
+- hosts: all
+  vars:
+    nfs_mount_opts: rw,soft,vers=3,proto=tcp
+    nfs_mount_type: nfs
 
 - name: Mount NFS share
   become: yes
