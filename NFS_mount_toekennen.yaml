@@ -1,25 +1,40 @@
 ---
 # Toevoegen van mountpunt in /etc/fstab.
+# Mediahuis - Claude Engels
 # 
 # Variables:
-# nfsserverpath:   NFS server
-# nfsmount:    Mountpunt op de klantserver.
-# nfsoptions:  NFS opties. Indien geen NFS opties, dan wordt automatisch "rw,soft,vers=3,proto=tcp" toegekend.
-# nfsclientpath: path op de client -> /mnt
+# mountserver:   mount server
+# mountvolume: volume op mount server
+# mountclientpath:    Mountpunt op de klantserver.
 # Script zal autoamtisch de mountpoint makenindien deze folder niet bestaat -> state: mounted
 #
 
 - hosts: all
   vars:
-    nfs_mount_opts: rw,soft,vers=3,proto=tcp
-    nfs_mount_type: nfs
+    mount_opts_nfs: 'rw,soft,vers=3,proto=tcp'
+    mount_opts_cifs: 'rw,credentials=/etc/smbcert/mft.core.smb.credentials,file_mode=0666,dir_mode=0777,noperm'
+    mount_user_mft: '/etc/smbcert/mft.core.smb.credentials'
+    mount_user_ntibco: '/etc/smbcert/ntibco.core.smb.credentials'
   
   tasks:
+    - set_fact:
+        mount_opts: "{{ mount_opts_nfs if (mounttype = 'nfs') else mount_opts_cifs }}"
+        
+    - set_fact:
+        mount_cred: "{{ mount_user_ntibco if (mountuser = 'ntibco') else mount_user_mft }}"
+        
+    - name: kopie de aanmeld gegevens
+      copy:
+        src: "{{ mount_cred }}"
+        dest: "{{ mount_cred }}"
+        mode: 0644
+        backup: yes
+        
     - name: Mount NFS share
       mount:
         backup: yes
-        fstype: "{{ nfstype | default(nfs_mount_type) }}"
-        path: "{{ nfsclientpath }}"
-        opts: "{{ nfsoptions | default(nfs_mount_opts) }}"
-        src: "{{ nfsserverpath }}"
+        fstype: "{{ mountstype }}"
+        path: "{{ mountclientpath }}"
+        opts: "{{ mount_opts }}"
+        src: "{{ mountserver }}{{ mountvolume }}"
         state: present
