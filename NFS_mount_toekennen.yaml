@@ -13,12 +13,13 @@
   vars:
     nfs_mount_opts: rw,soft,vers=3,proto=tcp
     nfs_mount_type: nfs
-
-- name: Mount NFS share
-  mount:
-    backup: yes
-    fstype: "{{ nfstype | default(nfs_mount_type) }}"
-    path: "{{ nfsclientpath }}"
-    opts: "{{ nfsoptions | default(nfs_mount_opts) }}"
-    src: "{{ nfsserverpath }}"
-    state: mounted
+  
+  tasks:
+    - name: Mount NFS share
+      mount:
+        backup: yes
+        fstype: "{{ nfstype | default(nfs_mount_type) }}"
+        path: "{{ nfsclientpath }}"
+        opts: "{{ nfsoptions | default(nfs_mount_opts) }}"
+        src: "{{ nfsserverpath }}"
+        state: mounted
