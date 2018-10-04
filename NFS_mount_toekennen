@@ -1,0 +1,26 @@
+---
+# Toevoegen van mountpunt in /etc/fstab.
+# 
+# Variables:
+# nfsserverpath:   NFS server
+# nfsmount:    Mountpunt op de klantserver.
+# nfsoptions:  NFS opties. Indien geen NFS opties, dan wordt automatisch "rw,soft,vers=3,proto=tcp" toegekend.
+# nfsclientpath: path op de client -> /mnt
+# Script zal autoamtisch de mountpoint makenindien deze folder niet bestaat -> state: mounted
+
+#
+
+nfs_mount_opts: rw,soft,vers=3,proto=tcp
+nfs_mount_type: nfs3
+
+- name: Mount NFS share
+  become: yes
+  mount:
+    backup
+    fstype: "{{ nfstype | default(nfs_mount_type) }}"
+    name: "{{ nfsclientpath }}"
+    opts: "{{ nfsoptions | default(nfs_mount_opts) }}"
+    src: "{{ nfsserverpath }}"
+    dump: 0
+    passno: 0
+    state: mounted
