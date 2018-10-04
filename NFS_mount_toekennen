@@ -17,11 +17,9 @@
 - name: Mount NFS share
   become: yes
   mount:
-    backup
+    backup: yes
     fstype: "{{ nfstype | default(nfs_mount_type) }}"
-    name: "{{ nfsclientpath }}"
+    path: "{{ nfsclientpath }}"
     opts: "{{ nfsoptions | default(nfs_mount_opts) }}"
     src: "{{ nfsserverpath }}"
-    dump: 0
-    passno: 0
     state: mounted
