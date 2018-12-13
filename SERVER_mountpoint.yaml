@@ -33,8 +33,8 @@
     - name: Mount NFS share
       mount:
         backup: yes
-        fstype: "{{ mountstype }}"
-        path: "{{ mountclientpath }}"
+        fstype: "{{ mounttype }}"
+        path: "{{ clientpath }}"
         opts: "{{ mount_opts }}"
-        src: "{{ mountserver }}{{ mountvolume }}"
+        src: "{{ serverpath }}"
         state: present
