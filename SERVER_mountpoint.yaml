@@ -27,7 +27,6 @@
       copy:
         src: "{{ mount_cred }}"
         dest: "{{ mount_cred }}"
-        remote_src: yes
         mode: 0644
         backup: yes
         
