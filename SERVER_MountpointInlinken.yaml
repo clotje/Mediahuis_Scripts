@@ -1,0 +1,43 @@
+---
+# Toevoegen van mountpunt in /etc/fstab.
+# Mediahuis - Claude Engels
+# 
+# Variables:
+# mountserver:   mount server
+# mountvolume: volume op mount server
+# mountclientpath:    Mountpunt op de klantserver.
+# mounttype: nfs | cifs
+# mountuser: mft | ntibco
+# Script zal autoamtisch de mountpoint makenindien deze folder niet bestaat -> state: mounted
+#
+
+
+- name: "Mountpoint Inlinken"
+  hosts: all
+  vars:
+    - mountopts:
+        ntibco: 'rw,credentials=/etc/smbcert/ntibco.core.smb.credentials,file_mode=0666,dir_mode=0777,noperm'
+        mft: 'rw,credentials=/etc/smbcert/mft.core.smb.credentials,file_mode=0666,dir_mode=0777,noperm'
+        nfs: 'rw,soft,vers=3,proto=tcp'
+
+    - mountcredfile:
+        ntibco: '/etc/smbcert/ntibco.core.smb.credentials'
+        mft: '/etc/smbcert/mft.core.smb.credentials'
+
+  tasks:
+    - name: kopie de aanmeld gegevens
+      copy:
+        src: "{{ mountcredfile[mountuser] }}"
+        dest: "{{ mountcredfile[mountuser] }}"
+        mode: 0644
+        backup: yes
+      when: mounttype == 'cifs'
+
+    - name: Mount NFS share
+      mount:
+        backup: yes
+        fstype: "{{ mounttype }}"
+        path: "{{ clientpath }}"
+        opts: "{{ mountopts[mountuser] }}"
+        src: "{{ serverpath }}"
+        state: present
