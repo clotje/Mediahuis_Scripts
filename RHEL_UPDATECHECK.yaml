@@ -1,0 +1,56 @@
+---
+
+# RHEL OS update Ansible playbook
+# Claude Engels - Versie 1.b - 2018
+
+
+- hosts: localhost
+  tasks:
+    - debug:
+        msg: "System {{ inventory_hostname }} has uuid {{ ansible_distribution }} {{ ansible_distribution_version }}"
+
+    - name: Upgrade naar de laatste versie (all packages of security packages).
+      yum:
+        name: '*'
+        update_cache: yes
+        state: latest
+
+    - name: Check of een reboot nodig is (kernel check)
+      shell: if [ $(rpm -q kernel|tail -n 1) != kernel-$(uname -r) ]; then echo 'rebootNodig'; else echo 'rebootNietNodig'; fi
+      ignore_errors: true
+      register: reboot_hint
+      
+    - debug:
+         msg: "Status reboot: {{ reboot_hint.stdout }}"
+
+    - name: Restart van de server {{ ansible_ssh_host | default(inventory_hostname) }} indien nodig.
+      command: /usr/bin/systemd-run --on-active=5 --timer-property=AccuracySec=100ms /usr/bin/systemctl reboot
+      async: 0
+      poll: 0
+      ignore_errors: true
+      become: yes
+      when: ansible_distribution_version > '6' and reboot_hint.stdout == "rebootNodig"
+      register: rebooting
+
+    - name: Restart van de server {{ ansible_ssh_host | default(inventory_hostname) }} indien nodig.
+      shell: sleep 10 & /sbin/shutdown -r now
+      async: 0
+      poll: 0
+      ignore_errors: true
+      become: yes
+      when: ansible_distribution_version < '7' and reboot_hint.stdout == "rebootNodig"
+      register: rebooting
+      
+   - pause:
+       minutes: 1
+
+    - name: Wacht op server {{ ansible_ssh_host | default(inventory_hostname) }} dat deze terug online is (ssh).
+      wait_for:
+        port: 22
+        state: started
+        host: '{{ ansible_ssh_host | default(inventory_hostname) }}'
+        timeout: 300
+        delay: 30
+        connect_timeout: 15
+      when: rebooting is changed
+      delegate_to: localhost
