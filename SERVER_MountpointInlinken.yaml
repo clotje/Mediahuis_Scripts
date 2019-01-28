@@ -40,4 +40,4 @@
         path: "{{ clientpath }}"
         opts: "{{ mountopts[mountuser] }}"
         src: "{{ serverpath }}"
-        state: present
+        state: mounted
