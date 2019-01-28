@@ -25,7 +25,7 @@
         mft: '/etc/smbcert/mft.core.smb.credentials'
 
   tasks:
-    - name: kopie de aanmeld gegevens
+    - name: scp de login gegevens als de mounttype gelijk is aan CIFS
       copy:
         src: "{{ mountcredfile[mountuser] }}"
         dest: "{{ mountcredfile[mountuser] }}"
@@ -33,7 +33,7 @@
         backup: yes
       when: mounttype == 'cifs'
 
-    - name: Mount NFS share
+    - name: Mount share
       mount:
         backup: yes
         fstype: "{{ mounttype }}"
