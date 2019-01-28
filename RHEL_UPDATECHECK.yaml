@@ -2,7 +2,9 @@
 
 # RHEL OS update Ansible playbook
 # Claude Engels - Versie 1.b - 2018
-
+# 
+# Variables:
+# PackageType:   * | security | CVE | errata
 
 - hosts: localhost
   tasks:
