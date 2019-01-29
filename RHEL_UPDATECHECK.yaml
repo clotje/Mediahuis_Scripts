@@ -43,7 +43,8 @@
       when: ansible_distribution_version < '7' and reboot_hint.stdout == "rebootNodig"
       register: rebooting
       
-   - pause:
+    - name: 1 min pause
+      pause:
        minutes: 1
 
     - name: Wacht op server {{ ansible_ssh_host | default(inventory_hostname) }} dat deze terug online is (ssh).
