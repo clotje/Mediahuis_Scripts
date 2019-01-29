@@ -14,7 +14,6 @@
     - name: Upgrade naar de laatste versie (all packages of security packages).
       yum:
         name: '*'
-        bugfix: '{{ yum_bugfix }}'
         security: '{{ yum_security }}'
         update_cache: yes
         state: latest
