@@ -7,9 +7,16 @@
 # PackageType:   * | security | CVE | errata
 
 - hosts: all
+  vars:
+    yum_security: 'no'
+    yum_bugfix: 'no'
+    
   tasks:
     - debug:
         msg: "System {{ inventory_hostname }} has uuid {{ ansible_distribution }} {{ ansible_distribution_version }}"
+        
+    - set_fact:
+      yum_security: "{{ mount_opts_nfs if (mounttype == 'nfs') else mount_opts_cifs }}"
 
     - name: Upgrade naar de laatste versie (all packages of security packages).
       yum:
