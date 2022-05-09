@@ -1,5 +1,5 @@
 ---
-# Toevoegen van mountpunt in /etc/fstab.
+# Toevoegen van mountpunt in /etc/fstab. 
 #
 # Variables:
 # nfsserverpath:   NFS server
